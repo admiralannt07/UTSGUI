@@ -15,6 +15,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -122,7 +123,7 @@ public class ToDoListUI extends javax.swing.JFrame {
 
     private void addTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTaskButtonActionPerformed
         // TODO add your handling code here:
-        if (tasks.size() < 7) { // Limit to 20 tasks for performance
+        if (tasks.size() < 7) { // Limit to 7 tasks for performance
             JPanel taskRow = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -130,8 +131,12 @@ public class ToDoListUI extends javax.swing.JFrame {
 
             Font poppinsFont = new Font("Poppins", Font.PLAIN, 16);
 
+            // Create the task number label
+            JLabel taskNumberLabel = new JLabel("Task " + (tasks.size() + 1) + ": ");
+            taskNumberLabel.setFont(poppinsFont);
+
             // Create a larger text field for task input with a placeholder effect
-            JTextField taskField = new JTextField("Enter your task here...", 30);
+            JTextField taskField = new JTextField("Enter your task here...", 25);
             taskField.setFont(poppinsFont);
             taskField.setForeground(Color.GRAY); // Placeholder text color
             taskField.setBackground(Color.PINK); // Initial background color for undone task
@@ -163,14 +168,20 @@ public class ToDoListUI extends javax.swing.JFrame {
             doneButton.addActionListener(e -> markTaskAsDone(taskField));
             doneButtons.add(doneButton);
 
+            // Add components to the task row
             gbc.gridx = 0;
+            gbc.weightx = 0;
+            taskRow.add(taskNumberLabel, gbc);
+
+            gbc.gridx = 1;
             gbc.weightx = 1.0;
             taskRow.add(taskField, gbc);
 
-            gbc.gridx = 1;
+            gbc.gridx = 2;
             gbc.weightx = 0;
             taskRow.add(doneButton, gbc);
 
+            // Add the task row to the main task panel
             taskPanel.add(taskRow);
             taskPanel.revalidate();
             taskPanel.repaint();
@@ -180,7 +191,7 @@ public class ToDoListUI extends javax.swing.JFrame {
     }//GEN-LAST:event_addTaskButtonActionPerformed
 
     private void markTaskAsDone(JTextField taskField) {
-        taskField.setForeground(new Color(0, 128, 0)); // Set color to green for completed task
+        taskField.setBackground(Color.GREEN); // Set color to green for completed task
         taskField.setEditable(false); // Optionally make the field non-editable once done
     }
 
