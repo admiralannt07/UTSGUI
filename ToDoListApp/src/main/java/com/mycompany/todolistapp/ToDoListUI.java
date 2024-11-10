@@ -6,7 +6,6 @@ package com.mycompany.todolistapp;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,9 +14,12 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -28,6 +30,7 @@ public class ToDoListUI extends javax.swing.JFrame {
 
     private ArrayList<JTextField> tasks = new ArrayList<>();
     private ArrayList<JButton> doneButtons = new ArrayList<>();
+    private ArrayList<JCheckBox> taskCheckboxes = new ArrayList<>();
 
     /**
      * Creates new form ToDoListUI
@@ -49,6 +52,8 @@ public class ToDoListUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         addTaskButton = new javax.swing.JButton();
         clearCompletedButton = new javax.swing.JButton();
+        clearSelectedButton = new javax.swing.JButton();
+        showTasksButton = new javax.swing.JButton();
         taskPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -56,7 +61,7 @@ public class ToDoListUI extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 18)); // NOI18N
         jLabel1.setText("To Do List App");
 
-        addTaskButton.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
+        addTaskButton.setFont(new java.awt.Font("Corbel", 0, 12)); // NOI18N
         addTaskButton.setText("Add Task");
         addTaskButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,7 +69,7 @@ public class ToDoListUI extends javax.swing.JFrame {
             }
         });
 
-        clearCompletedButton.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
+        clearCompletedButton.setFont(new java.awt.Font("Corbel", 0, 12)); // NOI18N
         clearCompletedButton.setText("Clear Completed Task");
         clearCompletedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,25 +77,47 @@ public class ToDoListUI extends javax.swing.JFrame {
             }
         });
 
+        clearSelectedButton.setFont(new java.awt.Font("Corbel", 0, 12)); // NOI18N
+        clearSelectedButton.setText("Clear Selected Task");
+        clearSelectedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearSelectedButtonActionPerformed(evt);
+            }
+        });
+
+        showTasksButton.setFont(new java.awt.Font("Corbel", 0, 12)); // NOI18N
+        showTasksButton.setText("Show Tasks");
+        showTasksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showTasksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addComponent(addTaskButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearCompletedButton)
-                .addGap(56, 56, 56))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearSelectedButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(showTasksButton)
+                .addGap(14, 14, 14))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearCompletedButton)
-                    .addComponent(addTaskButton))
-                .addGap(19, 19, 19))
+                    .addComponent(addTaskButton)
+                    .addComponent(clearSelectedButton)
+                    .addComponent(showTasksButton))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         taskPanel.setLayout(new javax.swing.BoxLayout(taskPanel, javax.swing.BoxLayout.Y_AXIS));
@@ -131,9 +158,13 @@ public class ToDoListUI extends javax.swing.JFrame {
 
             Font poppinsFont = new Font("Poppins", Font.PLAIN, 16);
 
-            // Create the task number label
+            // Create task number label
             JLabel taskNumberLabel = new JLabel("Task " + (tasks.size() + 1) + ": ");
             taskNumberLabel.setFont(poppinsFont);
+
+            // Create checkbox for selecting task
+            JCheckBox taskCheckbox = new JCheckBox();
+            taskCheckboxes.add(taskCheckbox); // Add to list for tracking
 
             // Create a larger text field for task input with a placeholder effect
             JTextField taskField = new JTextField("Enter your task here...", 25);
@@ -161,7 +192,7 @@ public class ToDoListUI extends javax.swing.JFrame {
                 }
             });
 
-            // Create the "Done" button with larger size and font
+            // Create the "Done" button
             JButton doneButton = new JButton("Done");
             doneButton.setFont(poppinsFont);
             doneButton.setPreferredSize(new Dimension(80, 30));
@@ -174,10 +205,14 @@ public class ToDoListUI extends javax.swing.JFrame {
             taskRow.add(taskNumberLabel, gbc);
 
             gbc.gridx = 1;
+            gbc.weightx = 0;
+            taskRow.add(taskCheckbox, gbc); // Add checkbox
+
+            gbc.gridx = 2;
             gbc.weightx = 1.0;
             taskRow.add(taskField, gbc);
 
-            gbc.gridx = 2;
+            gbc.gridx = 3;
             gbc.weightx = 0;
             taskRow.add(doneButton, gbc);
 
@@ -213,6 +248,38 @@ public class ToDoListUI extends javax.swing.JFrame {
         taskPanel.revalidate();
         taskPanel.repaint();
     }//GEN-LAST:event_clearCompletedButtonActionPerformed
+
+    private void clearSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSelectedButtonActionPerformed
+        // TODO add your handling code here:
+        for (int i = taskCheckboxes.size() - 1; i >= 0; i--) {
+            JCheckBox checkBox = taskCheckboxes.get(i);
+            if (checkBox.isSelected()) {
+                taskPanel.remove(taskPanel.getComponent(i)); // Remove from the panel
+                tasks.remove(i); // Remove from tasks list
+                taskCheckboxes.remove(i); // Remove checkbox from list
+                doneButtons.remove(i); // Remove "Done" button from list
+            }
+        }
+        taskPanel.revalidate();
+        taskPanel.repaint();
+    }//GEN-LAST:event_clearSelectedButtonActionPerformed
+
+    private void showTasksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTasksButtonActionPerformed
+        // TODO add your handling code here:
+        StringBuilder taskList = new StringBuilder("Your Tasks:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            JTextField taskField = tasks.get(i);
+            String taskText = taskField.getText();
+            String status = taskField.getBackground().equals(Color.GREEN) ? "Completed" : "Not Completed";
+            taskList.append("Task ").append(i + 1).append(": ").append(taskText).append(" - ").append(status).append("\n");
+        }
+        // Show all tasks in a scrollable JOptionPane if there are many
+        JTextArea textArea = new JTextArea(taskList.toString());
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+        JOptionPane.showMessageDialog(this, scrollPane, "Task List", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_showTasksButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,8 +319,10 @@ public class ToDoListUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addTaskButton;
     private javax.swing.JButton clearCompletedButton;
+    private javax.swing.JButton clearSelectedButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton showTasksButton;
     private javax.swing.JPanel taskPanel;
     // End of variables declaration//GEN-END:variables
 }
