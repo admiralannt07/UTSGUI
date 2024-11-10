@@ -37,6 +37,16 @@ public class ToDoListUI extends javax.swing.JFrame {
      */
     public ToDoListUI() {
         initComponents();
+        
+        setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
+        
+        // Add a WindowListener to handle the window close event
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                confirmExit(); // Call the confirmExit method when closing the window
+            }
+        });
     }
 
     /**
@@ -56,7 +66,7 @@ public class ToDoListUI extends javax.swing.JFrame {
         showTasksButton = new javax.swing.JButton();
         taskPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 18)); // NOI18N
         jLabel1.setText("To Do List App");
@@ -280,7 +290,21 @@ public class ToDoListUI extends javax.swing.JFrame {
         scrollPane.setPreferredSize(new Dimension(400, 300));
         JOptionPane.showMessageDialog(this, scrollPane, "Task List", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_showTasksButtonActionPerformed
-
+    
+    private void confirmExit() {
+        int option = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure to quit?",  // Message
+                "Exit Confirmation",      // Title of the dialog
+                javax.swing.JOptionPane.YES_NO_OPTION, // Options: Yes and No
+                javax.swing.JOptionPane.QUESTION_MESSAGE // Type: Question icon
+        );
+        
+        // Check the user's choice
+        if (option == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0); // Exit the program if "Yes" is selected
+        } // If "No" is selected, the dialog will close and the program will continue running
+    }
     /**
      * @param args the command line arguments
      */
