@@ -310,22 +310,27 @@ public class ToDoListUI extends javax.swing.JFrame {
 
     private void clearSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSelectedButtonActionPerformed
         // TODO add your handling code here:
+        System.out.println("Tasks size: " + tasks.size());
+        System.out.println("TaskCheckboxes size: " + taskCheckboxes.size());
+        System.out.println("DoneButtons size: " + doneButtons.size());
+        System.out.println("HoursList size: " + hoursList.size());
+        System.out.println("DaysList size: " + daysList.size());
+
         for (int i = taskCheckboxes.size() - 1; i >= 0; i--) {
             JCheckBox checkBox = taskCheckboxes.get(i);
             if (checkBox.isSelected()) {
-                // Remove the corresponding task row from the panel
+                // Safely remove each component
                 taskPanel.remove(taskPanel.getComponent(i));
-
-                // Remove the task components from all relevant lists
                 tasks.remove(i);
                 taskCheckboxes.remove(i);
                 doneButtons.remove(i);
                 hoursList.remove(i);
-                daysList.remove(i);
+                if (daysList.size() > i) {
+                    daysList.remove(i);
+                }
             }
         }
 
-        // Revalidate and repaint the panel to update the UI
         taskPanel.revalidate();
         taskPanel.repaint();
     }//GEN-LAST:event_clearSelectedButtonActionPerformed
