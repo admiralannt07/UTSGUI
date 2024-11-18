@@ -137,6 +137,7 @@ public class ToDoListUI extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
+        taskPanel.setBackground(new java.awt.Color(255, 255, 255));
         taskPanel.setLayout(new javax.swing.BoxLayout(taskPanel, javax.swing.BoxLayout.Y_AXIS));
         scrollPaneTaskPanel.setViewportView(taskPanel);
 
@@ -191,7 +192,9 @@ public class ToDoListUI extends javax.swing.JFrame {
     private void addTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTaskButtonActionPerformed
         // TODO add your handling code here:
         if (tasks.size() < 7) {
+            Color bg = new Color(255,255,255);
             JPanel taskRow = new JPanel(new GridBagLayout());
+            taskRow.setBackground(bg);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.insets = new Insets(5, 5, 5, 5);
